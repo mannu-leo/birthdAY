@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>A Small Present 💝</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      color: #fff;
+      text-align: center;
+      position: relative;
+    }
+
+    /* --- CORNER STICKERS --- */
+    .sticker-container {
+      position: absolute;
+      z-index: 1;
+      transition: opacity 1s ease;
+    }
+
+    .sticker-container img {
+      display: block;
+      animation: floatSticker 4s ease-in-out infinite;
+      width: 250px; /* Default size for corner stickers */
+      height: auto;
+    }
+
+    /* --- HORIZONTAL GIF ROW (Above Birthday Text) --- */
+    .horizontal-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px; /* Space between the horizontal GIFs */
+      margin-bottom: 15px; /* Space between GIFs and "Happy Birthday" */
+    }
+
+    .horizontal-row img {
+      /* --- RESIZE HORIZONTAL GIFs HERE --- */
+      width: 150px; 
+      height: auto;
+      animation: floatSticker 3s ease-in-out infinite;
+    }
+
+    @keyframes floatSticker {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    /* Corner Positions */
+    .pos-top-left { top: 5%; left: 5%; }
+    .pos-top-right { top: 5%; right: 5%; }
+    .pos-bottom-left { bottom: 5%; left: 5%; }
+    .pos-bottom-right { bottom: 5%; right: 5%; }
+
+    .screen {
+      position: absolute;
+      width: 100%;
+      padding: 20px;
+      transition: opacity 0.8s ease;
+      z-index: 2; 
+    }
+
+    .hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .emoji { font-size: 70px; margin-bottom: 20px; }
+    .tap-text { font-size: 20px; margin-top: 10px; opacity: 0.9; }
+
+    .tap-btn {
+      margin-top: 30px;
+      padding: 12px 30px;
+      border-radius: 30px;
+      border: none;
+      background: white;
+      color: #ee9ca7;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .tap-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .birthday {
+      font-family: 'Pacifico', cursive;
+      font-size: 40px;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .typing {
+      font-size: 18px;
+      max-width: 320px;
+      margin: auto;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* Floating elements (Hearts and Balloons) */
+    .floating-element {
+      position: absolute;
+      bottom: -50px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+    }
+
+    @media (max-width: 600px) {
+      .horizontal-row img { width: 70px; }
+      .sticker-container img { width: 60px; }
+    }
+  </style> 
+</head>
+<body>
+
+  <div class="sticker-container pos-top-left hidden" id="stkTL">
+    <img src="image/panda9.gif" alt="Corner">
+  </div>
+  <div class="sticker-container pos-top-right hidden" id="stkTR">
+    <img src="image/panda4.gif" alt="Corner">
+  </div>
+  <div class="sticker-container pos-bottom-left hidden" id="stkBL">
+    <img src="image/birthday-happy.gif" alt="Corner">
+  </div>
+  <div class="sticker-container pos-bottom-right hidden" id="stkBR">
+    <img src="image/birthday-happy.gif" alt="Corner">
+  </div>
+
+  <div class="screen" id="screen1">
+    <div class="emoji">🎁</div>
+    <div>I’ve made a small present for you</div>
+    <div class="tap-text">Tap to see 💕</div>
+    <button class="tap-btn" onclick="showBirthday()">Tap ✨</button>
+  </div>
+
+  <div class="screen hidden" id="screen2">
+    
+    <div class="horizontal-row">
+      <img src="image/panda 7.jpg" alt="Panda 1">
+      <img src="image/panda8.jpg" alt="Panda 2">
+      <img src="image/panda 6.jpg" alt="Birthday Panda">
+    </div>
+
+    <div class="birthday" id="birthdayText"></div>
+    <div class="typing" id="message"></div>
+  </div>
+
+  <script>
+    const birthdayLine = "Happy Birthday TASHU💖";
+    const messageLines = [
+      "You’re officially another year older, but somehow you’re still looking better than ever. Hope it’s a good one 🎂",
+      "You’re special, today as always 🌸"
+    ];
+
+    let charIndex = 0;
+
+    function showBirthday() {
+      document.getElementById("screen1").classList.add("hidden");
+      document.getElementById("screen2").classList.remove("hidden");
+      
+      // Reveal Corners
+      document.getElementById("stkTL").classList.remove("hidden");
+      document.getElementById("stkTR").classList.remove("hidden");
+      document.getElementById("stkBL").classList.remove("hidden");
+      document.getElementById("stkBR").classList.remove("hidden");
+      
+      typeBirthday();
+      startFloatingElements();
+    }
+
+    function typeBirthday() {
+      if (charIndex < birthdayLine.length) {
+        document.getElementById("birthdayText").innerHTML += birthdayLine.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeBirthday, 120);
+      } else {
+        typeMessage(0, 0);
+      }
+    }
+
+    function typeMessage(line, char) {
+      if (line >= messageLines.length) return;
+
+      if (char < messageLines[line].length) {
+        document.getElementById("message").innerHTML += messageLines[line].charAt(char);
+        setTimeout(() => typeMessage(line, char + 1), 40);
+      } else {
+        document.getElementById("message").innerHTML += "<br><br>";
+        setTimeout(() => typeMessage(line + 1, 0), 600);
+      }
+    }
+
+    function startFloatingElements() {
+      const elements = ["💗", "🎈", "💖", "🎈"];
+      setInterval(() => {
+        const item = document.createElement("div");
+        item.classList.add("floating-element");
+        item.innerHTML = elements[Math.floor(Math.random() * elements.length)];
+        item.style.left = Math.random() * 100 + "vw";
+        item.style.fontSize = (20 + Math.random() * 20) + "px";
+        item.style.animationDuration = (4 + Math.random() * 4) + "s";
+        document.body.appendChild(item);
+        setTimeout(() => item.remove(), 8000);
+      }, 400);
+    }
+  </script>
+
+</body>
+</html>
