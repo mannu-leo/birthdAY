@@ -5,7 +5,6 @@
 <title>Tap to open 💝</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Patrick+Hand&display=swap" rel="stylesheet">
 
 <style>
@@ -25,301 +24,214 @@ body{
   font-family:'Patrick Hand', cursive;
 }
 
-/* ================= FLOATING BACKGROUND HEARTS ================= */
-.heart{
-  position:absolute;
-  bottom:-30px;
-  color:#e63946;
-  animation:floatUp linear infinite;
+/* ================= FLOATING BACKGROUND EMOJIS ================= */
+.floating-emoji {
+  position: absolute;
+  bottom: -50px;
+  animation: floatUp linear infinite;
+  z-index: 1;
+  user-select: none;
 }
 
-@keyframes floatUp{
-  from{transform:translateY(0) scale(1); opacity:1;}
-  to{transform:translateY(-120vh) scale(1.5); opacity:0;}
+@keyframes floatUp {
+  from { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+  to { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
 }
 
-/* ================= ENVELOPE ================= */
-.envelope-container{
-  cursor:pointer;
-  z-index:5;
+/* ================= NEW CSS ENVELOPE ================= */
+.envelope-container {
+  cursor: pointer;
+  z-index: 5;
+  perspective: 1000px;
 }
 
-.envelope{
-  width:360px;
-  height:230px;
-  background:linear-gradient(145deg,#f6d89a,#eec77d);
-  border-radius:18px;
-  position:relative;
-  box-shadow:0 30px 80px rgba(0,0,0,0.35);
-  overflow:hidden;
+.envelope {
+  width: 350px;
+  height: 230px;
+  background: #f3cf7a; /* Golden base */
+  position: relative;
+  border-radius: 10px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.5s ease;
 }
 
-/* flap */
-.envelope-flap{
-  position:absolute;
-  inset:0;
-  background:linear-gradient(145deg,#f9e3b7,#eec77d);
-  clip-path:polygon(0 0,50% 55%,100% 0);
-  transform-origin:top;
-  transition:0.9s ease;
+/* Red Ribbon Horizontal */
+.ribbon-h {
+  position: absolute;
+  width: 100%;
+  height: 30px;
+  background: #d00000;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.envelope.open .envelope-flap{
-  transform:rotateX(180deg);
+/* Red Ribbon Vertical */
+.ribbon-v {
+  position: absolute;
+  height: 100%;
+  width: 30px;
+  background: #d00000;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
 }
 
-/* ribbon */
-.ribbon-h{
-  position:absolute;
-  top:50%;
-  left:0;
-  width:100%;
-  height:26px;
-  background:#c1121f;
-  transform:translateY(-50%);
+/* Cute Bow in the middle */
+.bow {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: #ff4d4d;
+  border-radius: 50%;
+  z-index: 2;
+  border: 4px solid #d00000;
+}
+.bow::before, .bow::after {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: #ff4d4d;
+  border: 3px solid #d00000;
+  border-radius: 50% 50% 0 50%;
+  top: -20px;
+  left: -25px;
+  transform: rotate(-15deg);
+}
+.bow::after {
+  border-radius: 50% 50% 50% 0;
+  left: 30px;
+  transform: rotate(15deg);
 }
 
-.ribbon-v{
-  position:absolute;
-  left:50%;
-  top:0;
-  width:26px;
-  height:100%;
-  background:#c1121f;
-  transform:translateX(-50%);
+/* Tap to Open Label */
+.label {
+  position: absolute;
+  bottom: 20px;
+  background: #fff;
+  padding: 5px 20px;
+  border-radius: 20px;
+  font-family: 'Sacramento', cursive;
+  font-size: 1.5rem;
+  color: #333;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  z-index: 3;
 }
 
-/* bow */
-.bow{
-  position:absolute;
-  top:50%;
-  left:50%;
-  width:60px;
-  height:60px;
-  background:#e63946;
-  border-radius:50%;
-  transform:translate(-50%,-50%);
-}
-
-/* label */
-.label{
-  position:absolute;
-  bottom:18px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#fff3dc;
-  padding:6px 24px;
-  border-radius:30px;
-  font-family:'Sacramento', cursive;
-  font-size:1.8rem;
-  color:#7a3e2e;
+.envelope.open {
+  transform: scale(0) rotate(10deg);
+  opacity: 0;
+  transition: all 0.6s ease;
 }
 
 /* ================= LETTER OVERLAY ================= */
 .overlay{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.25);
+  background:rgba(0,0,0,0.4);
   display:none;
   z-index:9;
 }
 
-/* ================= LETTER ================= */
 .letter{
   position:absolute;
   inset:5%;
-  background:linear-gradient(180deg,#fffaf0,#fdf0d5);
-  border-radius:30px;
-  box-shadow:0 40px 120px rgba(0,0,0,0.45);
-  padding:70px 35px;
-  animation:popUp 0.6s ease;
-  overflow:hidden;
+  background: #fffaf0;
+  border-radius:25px;
+  box-shadow:0 30px 100px rgba(0,0,0,0.5);
+  padding:60px 30px;
+  animation:popUp 0.5s ease;
+  overflow-y: auto;
 }
 
 @keyframes popUp{
-  from{transform:scale(0.8); opacity:0;}
+  from{transform:scale(0.5); opacity:0;}
   to{transform:scale(1); opacity:1;}
 }
 
 .letter h1{
   text-align:center;
   font-family:'Sacramento', cursive;
-  font-size:3.2rem;
-  color:#b11226;
-  margin-bottom:25px;
+  font-size:3rem;
+  color:#d00000;
+  margin-bottom:20px;
 }
 
 .letter p{
   text-align:center;
-  font-size:1.4rem;
-  color:#4b3b2a;
-  line-height:1.9;
+  font-size:1.3rem;
+  color:#333;
+  line-height:1.8;
 }
 
-/* ================= LETTER HEARTS (SLOW) ================= */
-.letter-heart{
-  position:absolute;
-  bottom:-20px;
-  color:#e63946;
-  animation:letterFloat linear infinite;
-  opacity:0.6;
-}
+/* GIFs */
+.gif{ position:absolute; width:120px; z-index: 10; }
+.top-left{ top:20px; left:10px; }
+.bottom-right{ bottom:10px; right:10px; }
 
-@keyframes letterFloat{
-  from{transform:translateY(0) scale(1);}
-  to{transform:translateY(-120%) scale(1.3); opacity:0;}
-}
-
-/* ================= GIFS ================= */
-.gif{
-  position:absolute;
-  width:150px;
-}
-
-.gif.top-left{
-  top:50px;
-  left:20px;
-}
-
-.gif.bottom-right{
-  bottom:20px;
-  right:10px;
-}
-
-/* responsive */
 @media (max-width: 600px){
-
-  body{
-    padding: 10px;
-  }
-
-  /* Envelope scales nicely */
-  .envelope{
-    width: 85vw;
-    height: 55vw;
-    max-width: 330px;
-    max-height: 220px;
-    border-radius: 16px;
-  }
-
-  .label{
-    font-size: 1.5rem;
-    padding: 6px 20px;
-  }
-
-  .bow{
-    width: 50px;
-    height: 50px;
-  }
-
-  .ribbon-h{
-    height: 22px;
-  }
-
-  .ribbon-v{
-    width: 22px;
-  }
-
-  /* Letter container */
-  .letter{
-    inset: 4%;
-    padding: 50px 20px 40px;
-    border-radius: 22px;
-    overflow-y: auto;
-  }
-
-  .letter h1{
-    font-size: 2.6rem;
-    margin-bottom: 18px;
-  }
-
-  .letter p{
-    font-size: 1.15rem;
-    line-height: 1.7;
-  }
-
-  /* GIFs repositioned so they don't block text */
-  .gif{
-    width: 22vw;
-    max-width: 140px;
-  }
-
-  .gif.top-left{
-    top: 15px;
-    left: 5px;
-  }
-
-  .gif.bottom-right{
-    bottom: 15px;
-    right: 10px;
-  }
+  .envelope{ width: 85vw; height: 55vw; }
+  .letter h1{ font-size: 2.2rem; }
+  .letter p{ font-size: 1.1rem; }
+  .gif{ width: 90px; }
 }
-
 </style>
 </head>
 
 <body>
 
-<!-- BACKGROUND HEARTS -->
 <script>
-for(let i=0;i<35;i++){
-  const h=document.createElement("div");
-  h.className="heart";
-  h.innerHTML="❤";
-  h.style.left=Math.random()*100+"vw";
-  h.style.fontSize=(14+Math.random()*24)+"px";
-  h.style.animationDuration=(6+Math.random()*6)+"s";
-  document.body.appendChild(h);
+const emojis = ["⭐", "🌸", "🧸", "✨", "💗", "🎈", "🎂", "🌈"];
+for(let i=0; i<30; i++){
+  const e = document.createElement("div");
+  e.className = "floating-emoji";
+  e.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+  e.style.left = Math.random() * 100 + "vw";
+  e.style.fontSize = (20 + Math.random() * 20) + "px";
+  e.style.animationDuration = (4 + Math.random() * 6) + "s";
+  e.style.animationDelay = Math.random() * 5 + "s";
+  document.body.appendChild(e);
 }
 </script>
 
-<!-- ENVELOPE -->
 <div class="envelope-container" onclick="openLetter()">
   <div class="envelope" id="envelope">
-    <div class="envelope-flap"></div>
     <div class="ribbon-h"></div>
     <div class="ribbon-v"></div>
     <div class="bow"></div>
-    <!-- CHANGE TEXT HERE -->
     <div class="label">Tap to Open</div>
   </div>
 </div>
 
-<!-- LETTER -->
 <div class="overlay" id="overlay" onclick="closeLetter()">
   <div class="letter" onclick="event.stopPropagation()">
-
-    <!-- ❤️ CHANGE GIF URLS HERE ❤️ -->
-    <img class="gif top-left" src="image/tkthao219-bunny.gif">
-    <img class="gif bottom-right" src="image/panda9.gif">
+    <img class="gif top-left" src="https://media.tenor.com/267f-H_v_9EAAAAM/hi-cute.gif">
+    <img class="gif bottom-right" src="https://media.tenor.com/Z8XnF5u2-8MAAAAM/dance-panda.gif">
 
     <h1> Hie Cutepie 💗</h1>
 
-    <!-- ✨ CHANGE LETTER CONTENT HERE ✨ -->
     <p>
-        <p>
-    Happy Birthday to one of the most amazing people in my life! ✨ 
-    On your special day, I just wanted to share something...<br><br>
-    
-    Sach kahu toh <strong>tumhare sath mujhe bhut zyada axha feel hota hai...</strong> 😇 
-    I don’t know what it is, but your vibe is just so positive. Whenever we talk, 
-    mera sara stress gayab ho jata hai. And honestly... <strong>tum bhut cute ho!</strong> 🧸 
-    Like, seriously, sometimes I just wonder how you manage to be so adorable all the time.<br><br>
-    
-    <strong>Tumhari smile sach me sabse pyaari hai...</strong> ✨ it’s like a literal sunshine! ☀️ 
-    Never let that smile fade because it makes everything better. 
-    I’m so lucky ki tum meri friend ho and we share this bond. 🤝💖<br><br>
-    
-    I hope your year is full of surprises, gifts, and unlimited cake! 🎂 
-    Par haan... meri treat pending hai, so bhulna mat! 🍫😉<br><br>
-    
-    Keep shining, keep smiling... and stay exactly as you are. <br>
-    <strong>Happy Birthday! 🎈🥳</strong>
-</p>
-    
-
+        Happy Birthday to one of the most amazing people in my life! ✨<br><br>
+        
+        Sach kahu toh <strong>tumhare sath mujhe bhut zyada axha feel hota hai...</strong> 😇 
+        I don’t know what it is, but your vibe is just so positive. Whenever we talk, 
+        mera sara stress gayab ho jata hai. And honestly... <strong>tum bhut cute ho!</strong> 🧸 
+        Sometimes I just wonder how you manage to be so adorable all the time.<br><br>
+        
+        <strong>Tumhari smile sach me sabse pyaari hai...</strong> ✨ it’s like a literal sunshine! ☀️ 
+        Never let that smile fade because it makes everything better. 
+        I’m so lucky ki tum meri friend ho. 🤝💖<br><br>
+        
+        I hope your year is full of surprises, gifts, and unlimited cake! 🎂 
+        Par haan... meri treat pending hai, so bhulna mat! 🍫😉<br><br>
+        
+        Keep shining, keep smiling... and stay exactly as you are. <br><br>
+        <strong>Happy Birthday TASHU! 🎈🥳</strong>
     </p>
-
   </div>
 </div>
 
@@ -328,7 +240,6 @@ function openLetter(){
   document.getElementById("envelope").classList.add("open");
   setTimeout(()=>{
     document.getElementById("overlay").style.display="block";
-    createLetterHearts();
   },600);
 }
 
@@ -336,25 +247,7 @@ function closeLetter(){
   document.getElementById("overlay").style.display="none";
   document.getElementById("envelope").classList.remove("open");
 }
-
-/* FLOATING HEARTS INSIDE LETTER */
-function createLetterHearts(){
-  const letter=document.querySelector(".letter");
-  for(let i=0;i<18;i++){
-    const h=document.createElement("div");
-    h.className="letter-heart";
-    h.innerHTML="❤";
-    h.style.left=Math.random()*100+"%";
-    h.style.fontSize=(12+Math.random()*18)+"px";
-    h.style.animationDuration=(8+Math.random()*6)+"s"; // slow speed
-    letter.appendChild(h);
-
-    setTimeout(()=>h.remove(),15000);
-  }
-}
 </script>
 
 </body>
 </html>
-
-
